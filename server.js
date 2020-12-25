@@ -1,7 +1,7 @@
-var express = require("express");
+var express = require('express');
 var app = express();
-var server = require("http").createServer(app);
-var io = require("socket.io")(server);
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
 
 // reserved events
 let ON_CONNECTION = "connection";
@@ -19,27 +19,28 @@ let listen_port = 6000;
 
 server.listen(listen_port);
 
+
 const userMap = new Map();
 
-io.sockets.on(ON_CONNECTION, function (socket) {
-  onEachUserConnection(socket);
-});
+io.sockets.on(ON_CONNECTION, function(socket){
+    onEachUserConnection(socket);
+})
 
-function onEachUserConnection(sock) {
+function onEachUserConnection(socket) {
   print("--------------------------------------");
   print(
     "Connected => socket ID: " +
-      sock.id +
+      socket.id +
       " User" +
-      stringifyToJson(sock.handshake.query)
+      stringifyToJson(socket.handshake.query)
   );
-  onDisconnect(sock);
+  onDisconnect(socket);
 }
 
-function onDisconnect(sock) {
-  sock.on(ON_DISCONNECT, function () {
-    print("disconnected " + sock.id);
-    sock.removeAllListeners(ON_DISCONNECT);
+function onDisconnect(socket) {
+  socket.on(ON_DISCONNECT, function () {
+    print("disconnected " + socket.id);
+    socket.removeAllListeners(ON_DISCONNECT);
   });
 }
 
